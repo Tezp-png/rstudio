@@ -21,6 +21,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SplitterResizedEvent;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -282,9 +283,12 @@ public class PaneManager
       // this must match the value in SourcePane.java
       final int UTILITY_AREA_SIZE = 75;
       DocTabLayoutPanel leftSource = new DocTabLayoutPanel(true, 65, UTILITY_AREA_SIZE);
-      //leftSource.setSize("100%", "100%");
+      SourcePane sourcePane = new SourcePane(leftSource);
+      //sourcePane.setSize("100%", "100%");
+      sourcePane.onBeforeShow();
       sourceList_ = new ArrayList<Widget>();
-      sourceList_.add((Widget) leftSource);
+      LayoutPanel layoutPanel = sourcePane.getLayoutPanel();
+      sourceList_.add((Widget) layoutPanel);
 
       panel_ = pSplitPanel.get();
       panel_.initialize((ArrayList<Widget>) sourceList_, left_, right_);

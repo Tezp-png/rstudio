@@ -96,6 +96,63 @@ public class SourcePane extends Composite implements Display,
       initWidget(panel_);
    }
 
+   public SourcePane(DocTabLayoutPanel tabPanel)
+   {
+      // !!! clean up this function and above when working
+      // This must match the value in PaneManager.java
+      final int UTILITY_AREA_SIZE = 74;
+
+      panel_ = new LayoutPanel();
+
+      new AutoGlassAttacher(panel_);
+
+      tabPanel_ = tabPanel;
+      panel_.add(tabPanel_);
+      panel_.setWidgetTopBottom(tabPanel_, 0, Unit.PX, 0, Unit.PX);
+      panel_.setWidgetLeftRight(tabPanel_, 0, Unit.PX, 0, Unit.PX);
+
+      utilPanel_ = new HTML();
+      utilPanel_.setStylePrimaryName(ThemeStyles.INSTANCE.multiPodUtilityArea());
+      panel_.add(utilPanel_);
+      panel_.setWidgetRightWidth(utilPanel_,
+                                 0, Unit.PX,
+                                 UTILITY_AREA_SIZE, Unit.PX);
+      panel_.setWidgetTopHeight(utilPanel_, 0, Unit.PX, 22, Unit.PX);
+
+      tabOverflowPopup_ = new TabOverflowPopupPanel();
+      tabOverflowPopup_.addCloseHandler(new CloseHandler<PopupPanel>()
+      {
+         public void onClose(CloseEvent<PopupPanel> popupPanelCloseEvent)
+         {
+            manageChevronVisibility();
+         }
+      });
+      chevron_ = new Image(new ImageResource2x(ThemeResources.INSTANCE.chevron2x()));
+      chevron_.setAltText("Switch to tab");
+      chevron_.getElement().getStyle().setCursor(Cursor.POINTER);
+      chevron_.addClickHandler(event -> tabOverflowPopup_.showRelativeTo(chevron_));
+
+      panel_.add(chevron_);
+      panel_.setWidgetTopHeight(chevron_,
+                               8, Unit.PX,
+                               chevron_.getHeight(), Unit.PX);
+      panel_.setWidgetRightWidth(chevron_,
+                                52, Unit.PX,
+                                chevron_.getWidth(), Unit.PX);
+      
+   }
+
+
+   public LayoutPanel getLayoutPanel()
+   {
+      return panel_;
+   }
+
+   public DocTabLayoutPanel getDocTabLayoutPanel()
+   {
+      return tabPanel_;
+   }
+
    @Override
    protected void onLoad()
    {
