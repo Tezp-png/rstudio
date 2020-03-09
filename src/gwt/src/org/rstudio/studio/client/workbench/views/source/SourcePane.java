@@ -52,6 +52,7 @@ public class SourcePane extends Composite implements Display,
    @Inject
    public SourcePane()
    {
+      // This must match the value in PaneManager.java
       final int UTILITY_AREA_SIZE = 74;
 
       panel_ = new LayoutPanel();

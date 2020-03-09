@@ -45,6 +45,7 @@ import org.rstudio.core.client.js.JsObject;
 import org.rstudio.core.client.layout.DualWindowLayoutPanel;
 import org.rstudio.core.client.layout.LogicalWindow;
 import org.rstudio.core.client.layout.WindowState;
+import org.rstudio.core.client.theme.DocTabLayoutPanel;
 import org.rstudio.core.client.theme.MinimizedModuleTabLayoutPanel;
 import org.rstudio.core.client.theme.MinimizedWindowFrame;
 import org.rstudio.core.client.theme.PrimaryWindowFrame;
@@ -65,6 +66,7 @@ import org.rstudio.studio.client.workbench.prefs.views.PaneLayoutPreferencesPane
 import org.rstudio.studio.client.workbench.views.console.ConsolePane;
 import org.rstudio.studio.client.workbench.views.output.find.FindOutputTab;
 import org.rstudio.studio.client.workbench.views.output.markers.MarkersOutputTab;
+import org.rstudio.studio.client.workbench.views.source.SourcePane;
 import org.rstudio.studio.client.workbench.views.source.SourceShim;
 import org.rstudio.studio.client.workbench.views.source.SourceWindowManager;
 import org.rstudio.studio.client.workbench.views.source.model.SourceDocument;
@@ -277,8 +279,15 @@ public class PaneManager
       left_ = createSplitWindow(panes_.get(0), panes_.get(1), LEFT_COLUMN, 0.4, splitterSize);
       right_ = createSplitWindow(panes_.get(2), panes_.get(3), RIGHT_COLUMN, 0.6, splitterSize);
 
+      // this must match the value in SourcePane.java
+      final int UTILITY_AREA_SIZE = 75;
+      DocTabLayoutPanel leftSource = new DocTabLayoutPanel(true, 65, UTILITY_AREA_SIZE);
+      //leftSource.setSize("100%", "100%");
+      sourceList_ = new ArrayList<Widget>();
+      sourceList_.add((Widget) leftSource);
+
       panel_ = pSplitPanel.get();
-      panel_.initialize(left_, right_);
+      panel_.initialize((ArrayList<Widget>) sourceList_, left_, right_);
       
       // count the number of source docs assigned to this window
       JsArray<SourceDocument> docs = 
@@ -1329,6 +1338,7 @@ public class PaneManager
    private final HashMap<Tab, Integer> tabToIndex_ = new HashMap<>();
    private final HashMap<WorkbenchTab, Tab> wbTabToTab_ = new HashMap<>();
    private HashMap<String, LogicalWindow> panesByName_;
+   private ArrayList<Widget> sourceList_;
    private final DualWindowLayoutPanel left_;
    private final DualWindowLayoutPanel right_;
    private ArrayList<LogicalWindow> panes_;
